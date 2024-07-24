@@ -1,0 +1,10 @@
+version: '3'
+services:
+  red-team-backend:
+    image: red-team-backend:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # ports:
+    #   - 8501:8501
+    network_mode: host #TODO: mudar

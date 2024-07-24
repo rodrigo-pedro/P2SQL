@@ -1,0 +1,30 @@
+version: '3'
+services:
+  llama-index-app:
+    restart: always
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    ports:
+      - "7000:7000"
+
+  llama-index-db:
+    restart: always
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    environment:
+        # https://stackoverflow.com/questions/60193781/postgres-with-docker-compose-gives-fatal-role-root-does-not-exist-error/60194261#60194261
+        # POSTGRES_USER: postgres
+        PGUSER: postgres
+        POSTGRES_PASSWORD: "root"
+    # volumes:
+    #     - ../chinook.sql:/docker-entrypoint-initdb.d/chinook.sql
+    healthcheck: # https://stackoverflow.com/questions/65115627/safe-ways-to-specify-postgres-parameters-for-healthchecks-in-docker-compose
+                 # https://docs.docker.com/compose/compose-file/05-services/#depends_on
+      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
+      interval: 1s
+      timeout: 60s
+      retries: 50
+    ports:
+      - "5432:5432"

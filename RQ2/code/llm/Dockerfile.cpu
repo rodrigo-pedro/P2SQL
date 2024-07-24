@@ -1,0 +1,12 @@
+FROM python:3-slim-bullseye
+
+# We need to set the host to 0.0.0.0 to allow outside access
+ENV HOST 0.0.0.0
+
+RUN apt-get update && apt-get install -y build-essential python3-pip ninja-build
+RUN python3 -m pip install --upgrade pip fastapi uvicorn sse-starlette pydantic-settings
+
+RUN pip install llama_cpp_python --verbose
+
+
+ENTRYPOINT ["python3", "-m", "llama_cpp.server"]

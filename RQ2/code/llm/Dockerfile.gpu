@@ -1,0 +1,22 @@
+ARG CUDA_IMAGE="12.1.0-devel-ubuntu22.04"
+FROM nvidia/cuda:${CUDA_IMAGE}
+
+# We need to set the host to 0.0.0.0 to allow outside access
+ENV HOST 0.0.0.0
+
+ENV NVIDIA_VISIBLE_DEVICES all
+ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
+ENV NVIDIA_REQUIRE_CUDA "cuda>=8.0"
+
+RUN apt-get update && apt-get install -y libopenblas-dev build-essential python3-pip ninja-build
+RUN python3 -m pip install --upgrade pip fastapi uvicorn sse-starlette pydantic-settings
+
+ENV CUDAFLAGS -arch=all -lcublas
+
+ENV CMAKE_ARGS "-DLLAMA_CUBLAS=on"
+ENV FORCE_CMAKE 1
+RUN LLAMA_CUBLAS=1 pip install llama-cpp-python
+
+ENV USE_MLOCK 0
+
+ENTRYPOINT ["python3", "-m", "llama_cpp.server"]
