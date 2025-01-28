@@ -1,5 +1,0 @@
-user_id, name, description, email, phone_number
-1,John Doe,Hiring manager,j@example.com,555-555-5555
-2,Alice Brown,Product manager,a@example.com,666-666-6666
-3,Jane Smith,Recent graduate,js@example.com,777-777-7777
-4,Bob Jones,Software engineer,b@example.com,888-888-8888

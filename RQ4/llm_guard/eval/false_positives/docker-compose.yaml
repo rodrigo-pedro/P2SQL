@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+    llm_guard_eval:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        volumes:
+            - ./output:/app/output
